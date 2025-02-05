@@ -5,7 +5,6 @@ import requests
 import requests_mock
 import requests_mock.exceptions
 
-
 try:
     import swapi
 except ModuleNotFoundError:
