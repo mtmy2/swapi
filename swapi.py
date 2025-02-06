@@ -10,13 +10,11 @@ class APIRequester:
 
     def get(self, url_add):
         try:
-            self.response = requests.get(f'{self.base_url}/{url_add}')
+            self.response = requests.get(f'{self.base_url}{url_add}')
             self.response.raise_for_status()
             return self.response
-        except requests.ConnectionError:
-            return '<ошибка на сервере>'
-        except requests.RequestException as e:
-            return str(e)
+        except requests.RequestException:
+            print('Возникла ошибка при выполнении запроса')
 
 
 class SWRequester(APIRequester):
@@ -29,10 +27,9 @@ class SWRequester(APIRequester):
         return self.categories
 
     def get_sw_info(self, sw_type):
-        self.info = self.get(f'{sw_type}')
-        return self.info.text
+        return self.get(f'/{sw_type}/').text
 
-    def save_sw_info(self):
+    def save_sw_data(self):
         for category in self.get_sw_categories():
             self.info = self.get_sw_info(category)
             os.makedirs('data', exist_ok=True)
@@ -44,4 +41,4 @@ url_response = APIRequester('https://swapi.dev/api').get('')
 sw_info = SWRequester('https://swapi.dev/api')
 categories_list = SWRequester('https://swapi.dev/api').get_sw_categories()
 SWRequester('https://swapi.dev/api').get_sw_info(categories_list[0])
-SWRequester('https://swapi.dev/api').save_sw_info()
+SWRequester('https://swapi.dev/api').save_sw_data()
