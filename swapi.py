@@ -1,7 +1,6 @@
-import os
-
 import requests
 
+from pathlib import Path
 
 class APIRequester:
 
@@ -18,27 +17,25 @@ class APIRequester:
 
 
 class SWRequester(APIRequester):
-
-    def __init__(self, base_url):
-        super().__init__(base_url)
-
+    #sw_requester = SWRequester('https://swapi.dev/api')
+        
     def get_sw_categories(self):
-        self.categories = list(self.get('').json().keys())
+        self.categories = self.get('/').json().keys()
         return self.categories
 
     def get_sw_info(self, sw_type):
         return self.get(f'/{sw_type}/').text
 
-    def save_sw_data(self):
-        for category in self.get_sw_categories():
-            self.info = self.get_sw_info(category)
-            os.makedirs('data', exist_ok=True)
-            with open(f'data/{category}.txt', 'w', encoding="utf-8") as f:
-                f.write(self.info)
+def save_sw_data():
+    for category in list(SWRequester('https://swapi.dev/api').get_sw_categories()):
+        info = SWRequester('https://swapi.dev/api').get_sw_info(category)
+        Path('data').mkdir(exist_ok=True)
+        with open(f'data/{category}.txt', 'w', encoding="utf-8") as f:
+            f.write(info)
 
 
 url_response = APIRequester('https://swapi.dev/api').get('')
 sw_info = SWRequester('https://swapi.dev/api')
-categories_list = SWRequester('https://swapi.dev/api').get_sw_categories()
+categories_list = list(SWRequester('https://swapi.dev/api').get_sw_categories())
 SWRequester('https://swapi.dev/api').get_sw_info(categories_list[0])
-SWRequester('https://swapi.dev/api').save_sw_data()
+save_sw_data()
