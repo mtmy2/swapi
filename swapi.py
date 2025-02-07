@@ -1,6 +1,6 @@
-import requests
-
 from pathlib import Path
+
+import requests
 
 
 class APIRequester:
@@ -18,7 +18,7 @@ class APIRequester:
 
 
 class SWRequester(APIRequester):
-            
+
     def get_sw_categories(self):
         self.categories = self.get('/').json().keys()
         return self.categories
@@ -26,8 +26,10 @@ class SWRequester(APIRequester):
     def get_sw_info(self, sw_type):
         return self.get(f'/{sw_type}/').text
 
+
 def save_sw_data():
-    for category in list(SWRequester('https://swapi.dev/api').get_sw_categories()):
+    for category in list(SWRequester(
+            'https://swapi.dev/api').get_sw_categories()):
         info = SWRequester('https://swapi.dev/api').get_sw_info(category)
         Path('data').mkdir(exist_ok=True)
         with open(f'data/{category}.txt', 'w', encoding="utf-8") as f:
@@ -36,6 +38,7 @@ def save_sw_data():
 
 url_response = APIRequester('https://swapi.dev/api').get('')
 sw_info = SWRequester('https://swapi.dev/api')
-categories_list = list(SWRequester('https://swapi.dev/api').get_sw_categories())
+categories_list = list(SWRequester(
+    'https://swapi.dev/api').get_sw_categories())
 SWRequester('https://swapi.dev/api').get_sw_info(categories_list[0])
 save_sw_data()
