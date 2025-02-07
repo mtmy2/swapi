@@ -2,6 +2,7 @@ import requests
 
 from pathlib import Path
 
+
 class APIRequester:
 
     def __init__(self, base_url):
@@ -17,8 +18,7 @@ class APIRequester:
 
 
 class SWRequester(APIRequester):
-    #sw_requester = SWRequester('https://swapi.dev/api')
-        
+            
     def get_sw_categories(self):
         self.categories = self.get('/').json().keys()
         return self.categories
